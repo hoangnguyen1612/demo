@@ -1,0 +1,147 @@
+<pre></pre>
+<?php
+print_r($_REQUEST);
+?>
+<br />
+<br />
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<form method="POST">
+<table id="tbl-attraction" class="table table-bordered">
+    <tbody>  
+        <tr class="block-attraction" index-attraction="1">
+	        <td>BLock Attraction&nbsp;&nbsp;&nbsp;<a href="#" class="btn-delete" data-attraction="1">Delete</a></td>
+	        <td></td>
+     	</tr>
+     	<tr class="block-attraction" index-attraction="1">
+     		<td>
+     			<select class="form-control" name="attractions[1][relation]">
+				    <option>1</option>
+				    <option>2</option>
+				    <option>3</option>
+				    <option>4</option>
+				</select>
+     		</td>
+     		<td>
+     			<input type="text" class="form-control" name="attractions[1][code]" value="01, 02" />
+     		</td>
+     	</tr>
+
+     	<tr class="block-attraction" index-attraction="2">
+	        <td>BLock Attraction&nbsp;&nbsp;&nbsp;<a href="#" class="btn-delete" data-attraction="2">Delete</a></td>
+	        <td></td>
+     	</tr>
+     	<tr class="block-attraction" index-attraction="2">
+     		<td>
+     			<select class="form-control" name="attractions[2][relation]">
+				    <option>1</option>
+				    <option selected>2</option>
+				    <option>3</option>
+				    <option>4</option>
+				</select>
+     		</td>
+     		<td>
+     			<input type="text" class="form-control" name="attractions[2][code]" value="02, 03" />
+     		</td>
+     	</tr>
+
+     	<tr class="block-attraction" index-attraction="3">
+	        <td>BLock Attraction&nbsp;&nbsp;&nbsp;<a href="#" class="btn-delete" data-attraction="3">Delete</a></td>
+	        <td></td>
+     	</tr>
+     	<tr class="block-attraction" index-attraction="3">
+     		<td>
+     			<select class="form-control" name="attractions[3][relation]">
+				    <option>1</option>
+				    <option>2</option>
+				    <option selected="">3</option>
+				    <option>4</option>
+				</select>
+     		</td>
+     		<td>
+     			<input type="text" class="form-control" name="attractions[3][code]" value="03, 04" />
+     		</td>
+     	</tr>
+        
+        <tr>
+            <td colspan="2"><button id="btn-add" type="button">
+                Add
+                </button></td>
+        </tr>
+    </tbody>
+  </table>
+    <button type="button" id="btn-test">Test</button>
+    <button type="submit">Submit</button>
+ </form>
+<script>
+    var TICKET = TICKET || {};
+    TICKET.Create = (function ($) {
+        function add() {
+            $(document).on('click', '#btn-add', function(e) {
+                e.preventDefault();
+                var tr = $('#hide').html();
+                
+               $(tr).insertAfter('#tbl-attraction tr:nth-last-child(2)');
+            });
+        }
+
+        function deleteAttraction() {
+        	$(document).on('click', '.btn-delete', function(e) {
+                // e.preventDefault();
+
+                var id = $(this).attr('data-attraction');
+                $('.block-attraction[index-attraction="'+ id +'"]').remove();
+                updateIndex();
+            });
+        }
+        
+        function updateIndex() {
+            //$(document).on('click', '#btn-test', function(e) {
+                var idxRelation = 1;
+                var idxCode = 1;
+                $('[name^="attractions["]').each(function() {
+                   console.log($(this));
+                   //console.log($(this).attr('name'));
+                    if($(this).attr('name').match(/^attractions\[[1-5]\]\[relation\]/g)) {
+                        console.log($(this).attr('name'));
+                        $(this).attr('name', 'attractions[' + idxRelation + '][relation]');
+                        console.log($(this).attr('name'));
+                        idxRelation++;
+                    }
+                    
+                    if($(this).attr('name').match(/^attractions\[[1-5]\]\[code\]/g)) {
+                        console.log($(this).attr('name'));
+                        $(this).attr('name', 'attractions[' + idxCode + '][code]');
+                        console.log($(this).attr('name'));
+                        idxCode++;
+                    }
+                });
+            //});
+        }
+        
+        return {
+            init() {
+                add();
+                deleteAttraction();
+                updateIndex();
+            }
+        };
+    })(jQuery);
+    
+    TICKET.Create.init();
+</script>
+<style>
+#hide {
+        display: none;
+    }
+</style>
